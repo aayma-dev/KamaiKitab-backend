@@ -4,10 +4,14 @@ from datetime import datetime
 from enum import Enum
 import bleach
 
+# Replace with:
 class UserRole(str, Enum):
-    USER = "user"
+    WORKER = "worker"
+    VERIFIER = "verifier"
+    ADVOCATE = "advocate"
     ADMIN = "admin"
-
+    USER = "user"  # Keep for backward compatibility
+    
 class UserBase(BaseModel):
     name: str = Field(..., min_length=2, max_length=50)
     email: EmailStr

@@ -1,10 +1,10 @@
-﻿# Core Framework
+# Core Framework
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
 python-multipart==0.0.6
 
 # Database
-sqlalchemy==2.0.23
+sqlalchemy>=2.0.30
 psycopg[binary]>=3.1.0
 alembic==1.12.1
 
@@ -13,7 +13,7 @@ python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 bcrypt==4.0.1
 authlib==1.2.1
-python-owasp-zap-v2.4==0.0.2
+
 
 # Validation
 email-validator==2.1.0
