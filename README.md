@@ -1,102 +1,91 @@
-﻿# 🚀 KamaiKitab - Gig Worker Income Platform
+# 🖥️ KamaiKitab Backend
 
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.104.1-009688?logo=fastapi)](https://fastapi.tiangolo.com/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1?logo=postgresql)](https://www.postgresql.org/)
-[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python)](https://www.python.org/)
+**Backend API for Pakistan's gig workforce platform.**
 
-> **Empowering gig workers to track, verify, and understand their earnings**
+[![Node.js](https://img.shields.io/badge/Node.js-18.x-339933?style=for-the-badge&logo=nodedotjs)](https://nodejs.org/)
+[![Express.js](https://img.shields.io/badge/Express.js-4.x-000000?style=for-the-badge&logo=express)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb)](https://mongodb.com/)
 
-## ✨ Features
-
-| Feature | Status |
-|---------|--------|
-| 🔐 JWT Authentication | ✅ Working |
-| 📧 Email Verification | ✅ Working |
-| 💰 Earnings CRUD | ✅ Working |
-| 📊 CSV Bulk Import | ✅ Working |
-| 🔍 Anomaly Detection | ✅ Working |
-| 💬 AI Chatbot | ✅ Working |
-| 📋 Grievance System | ✅ Working |
-| ✅ Verification Flow | ✅ Working |
-| 👥 Role Management | ✅ Working |
+---
 
 ## 🚀 Quick Start
 
-`ash
-# Clone & setup
-git clone https://github.com/YOUR_USERNAME/KamaiKitab-backend.git
-cd KamaiKitab-backend
-python -m venv venv
-venv\Scripts\activate  # Windows
-pip install -r requirements.txt
+### Prerequisites
+- Node.js 18+
+- MongoDB
 
-# Configure database
-cp .env.example .env
-# Edit .env with your PostgreSQL credentials
+### Installation
+
+```bash
+# Clone repo
+git clone https://github.com/aayma-codes/project-repo-backend.git
+cd project-repo-backend
+
+# Install dependencies
+npm install
+
+# Create .env file
+cat > .env << EOF
+PORT=5000
+MONGODB_URI=mongodb://localhost:27017/kamaikitab
+JWT_SECRET=your_secret_key_here
+JWT_EXPIRE=7d
+FRONTEND_URL=http://localhost:5173
+EOF
 
 # Run server
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-📡 API Documentation
-Once running, visit: http://localhost:8000/docs
-
-🧪 Test Credentials
-json
-{
-  "email": "worker@test.com",
-  "password": "Test1234!"
-}
-📊 System Status
-text
-✅ Authentication Service  - Operational
-✅ Earnings Service       - Operational  
-✅ Anomaly Detection      - Operational
-✅ Chatbot Service        - Operational
-✅ Grievance Service      - Operational
-✅ Database (PostgreSQL)  - Connected
-🛠️ Tech Stack
-FastAPI - High-performance backend
-
-PostgreSQL - Reliable database
-
-JWT - Secure authentication
-
-bcrypt - Password hashing
-
-SQLAlchemy - ORM
+npm run dev
+Server runs at http://localhost:5000
 
 📁 Project Structure
 text
-KamaiKitab-backend/
-├── app/
-│   ├── routers/     # API endpoints
-│   ├── models.py    # Database models
-│   ├── auth.py      # Authentication logic
-│   └── security.py  # Security utilities
-├── grievance-service/  # Node.js service
-├── requirements.txt
-└── .env.example
-👥 Roles
-Role    Permissions
-👷 Worker    Add earnings, view analytics, submit grievances
-✅ Verifier    Verify earnings submissions
-📊 Advocate    Analytics, manage grievances
-👑 Admin    Full system access
-🎯 Anomaly Detection Example
+project-backend/
+├── src/
+│   ├── controllers/     # Request handlers
+│   ├── models/          # MongoDB schemas
+│   ├── routes/          # API endpoints
+│   ├── middleware/      # Auth, validation
+│   └── services/        # Business logic
+├── .env                 # Environment variables
+└── server.js            # Entry point
+🔌 Main API Endpoints
+Method	Endpoint	Description
+POST	/api/auth/register	Register user
+POST	/api/auth/login	Login
+GET	/api/earnings	Get earnings
+POST	/api/earnings	Add earnings
+POST	/api/verify/upload	Upload proof
+GET	/api/certificates	Get certificates
+POST	/api/reports/anonymous	Submit report
+GET	/api/advocate/heatmap	Heatmap data
+🔄 Pull Latest Changes
 bash
-curl -X POST http://localhost:8000/api/anomaly/detect \
-  -H "Content-Type: application/json" \
-  -d '{
-    "earnings_history": [
-      {"date":"2024-04-01","net_received":5000},
-      {"date":"2024-04-08","net_received":3000},
-      {"date":"2024-04-15","net_received":2000}
-    ]
-  }'
-Response: Detects 40% income drop with explanation
+git restore .
+del .env        # Windows
+# rm .env       # Mac/Linux
+git pull origin main
+🚢 Deployment
+Recommended platforms: Render (free) or Railway
 
-📞 Support
-API Docs: http://localhost:8000/docs
+Push code to GitHub
 
-Health Check: http://localhost:8000/health
+Connect repo to Render/Railway
 
-Built with ❤️ for gig workers | SOFTEC 2026
+Add environment variables
+
+Deploy
+
+📝 Environment Variables
+Variable	Required	Default
+PORT	No	5000
+MONGODB_URI	Yes	-
+JWT_SECRET	Yes	-
+JWT_EXPIRE	No	7d
+FRONTEND_URL	No	http://localhost:5173
+👥 Team
+Backend Developer: @aayma-codes
+
+<div align="center">
+Made with ❤️ for Pakistan's Gig Workers
+
+</div> ```
