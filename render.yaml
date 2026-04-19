@@ -1,0 +1,62 @@
+﻿services:
+  - type: web
+    name: kamaikitab-api
+    runtime: python
+    repo: https://github.com/aayma-dev/KamaiKitab-backend.git
+    plan: free
+    region: singapore
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: kamaikitab-db
+          property: connectionString
+      - key: SECRET_KEY
+        sync: false
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: False
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: 30
+      - key: REFRESH_TOKEN_EXPIRE_DAYS
+        value: 7
+
+  - type: web
+    name: kamaikitab-grievance
+    runtime: node
+    repo: https://github.com/aayma-dev/KamaiKitab-backend.git
+    plan: free
+    region: singapore
+    buildCommand: cd grievance-service && npm install
+    startCommand: cd grievance-service && node server.js
+    envVars:
+      - key: DB_HOST
+        fromDatabase:
+          name: kamaikitab-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: kamaikitab-db
+          property: port
+      - key: DB_USER
+        fromDatabase:
+          name: kamaikitab-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: kamaikitab-db
+          property: password
+      - key: DB_NAME
+        fromDatabase:
+          name: kamaikitab-db
+          property: database
+      - key: JWT_SECRET
+        sync: false
+
+databases:
+  - name: kamaikitab-db
+    plan: free
