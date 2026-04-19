@@ -1,4 +1,4 @@
-﻿from passlib.context import CryptContext
+from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any
 from jose import jwt
@@ -8,28 +8,35 @@ import secrets
 import hashlib
 from secrets import compare_digest
 import logging
+import bcrypt
 
 logger = logging.getLogger(__name__)
 
-pwd_context = CryptContext(
-    schemes=["bcrypt"],
-    deprecated="auto",
-    bcrypt__rounds=12
-)
-
+# Use bcrypt directly instead of passlib for better compatibility
 def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+    """Hash a password using bcrypt directly"""
+    password_bytes = password.encode('utf-8')[:72]
+    salt = bcrypt.gensalt()
+    return bcrypt.hashpw(password_bytes, salt).decode('utf-8')
 
 def verify_password(plain_password: str, hashed_password: Optional[str]) -> bool:
+    """Verify password with bcrypt"""
     if not hashed_password:
-        dummy = hashlib.pbkdf2_hmac('sha256', b'dummy', b'salt', 100000)
-        return compare_digest(dummy, dummy)
-    return pwd_context.verify(plain_password, hashed_password)
+        return False
+    
+    try:
+        plain_bytes = plain_password.encode('utf-8')[:72]
+        hash_bytes = hashed_password.encode('utf-8')
+        return bcrypt.checkpw(plain_bytes, hash_bytes)
+    except Exception:
+        return False
 
 def generate_secure_token(length: int = 32) -> str:
+    """Generate a cryptographically secure random token"""
     return secrets.token_urlsafe(length)
 
 def create_access_token(data: Dict[str, Any]) -> str:
+    """Create JWT access token"""
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({
@@ -40,6 +47,7 @@ def create_access_token(data: Dict[str, Any]) -> str:
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
 def create_refresh_token(data: Dict[str, Any]) -> str:
+    """Create JWT refresh token"""
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
     to_encode.update({
@@ -50,6 +58,7 @@ def create_refresh_token(data: Dict[str, Any]) -> str:
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
 def verify_token(token: str, token_type: str = "access") -> Optional[Dict[str, Any]]:
+    """Verify and decode JWT token"""
     try:
         payload = jwt.decode(
             token,
@@ -68,6 +77,7 @@ def verify_token(token: str, token_type: str = "access") -> Optional[Dict[str, A
         return None
 
 def mask_email(email: str) -> str:
+    """Mask email for logging"""
     if '@' not in email:
         return '*' * len(email)
     local, domain = email.split('@', 1)
